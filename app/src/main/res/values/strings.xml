@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SensorSimulationApp</string>
+    <string name="begin_simulation">begin simulation</string>
+    <string name="title_simulation">simulationApp</string>
+</resources>
