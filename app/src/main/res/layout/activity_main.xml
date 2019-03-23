@@ -6,32 +6,40 @@
     android:background="#fff"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:text="@string/title_simulation"
-        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/sensorView"
-        android:src="@drawable/sensor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView"
+        android:layout_above="@+id/appName"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="0dp"
+        android:src="@drawable/sensor" />
+
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        />
+        android:text="@string/title_simulation"
+        android:textSize="20sp" />
+
+    <Spinner
+        android:id="@+id/statusSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appName"
+        android:prompt="@string/chooseOptionSpinner"
+        android:entries="@array/patientStatus" />
 
     <Button
         android:id="@+id/beginSimulationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sensorView"
+        android:layout_below="@+id/statusSpinner"
         android:layout_centerInParent="true"
         android:text="@string/begin_simulation"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:onClick="beginSimulation"/>
 
 </RelativeLayout>

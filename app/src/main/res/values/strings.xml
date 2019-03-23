@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">SensorSimulationApp</string>
     <string name="begin_simulation">begin simulation</string>
-    <string name="title_simulation">simulationApp</string>
+    <string name="title_simulation">sensorApp</string>
+    <string name="chooseOptionSpinner">choose option</string>
+    <string-array name="patientStatus">
+        <item>green</item>
+        <item>yellow</item>
+        <item>red</item>
+        <item>black</item>
+        <item>random</item>
+    </string-array>
 </resources>
