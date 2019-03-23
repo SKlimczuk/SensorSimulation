@@ -1,19 +1,17 @@
 package com.example.sensorsimulationapp.model;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Sensor {
+    //thread safety generation of integer id
+    private static AtomicInteger nextId = new AtomicInteger();
+
     private int id;
     private int pulse;
     private int bloodSaturation;
 
     public Sensor() {
-    }
-
-    public Sensor(int id,
-                  int pulse,
-                  int bloodSaturation) {
-        this.id = id;
-        this.pulse = pulse;
-        this.bloodSaturation = bloodSaturation;
+        this.id = nextId.incrementAndGet();
     }
 
     public int getId() {

@@ -31,6 +31,8 @@ public class DefaultSensorActivity implements SensorActivity {
     @Override
     public int generateBloodSaturation(String patientStatus) {
         //TODO: investigate what is the correct saturation level value for specific patients status
-        return 0;
+        Random random = new Random();
+        int saturationLevel = random.nextInt(100) + 1;
+        return saturationLevel;
     }
 }
