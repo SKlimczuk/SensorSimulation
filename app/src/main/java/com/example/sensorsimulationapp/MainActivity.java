@@ -19,23 +19,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void beginSimulation(View view) {
-        final Intent intent = new Intent(this, SimulationResultActivity.class);
+        final Intent chosenPatientStatus = new Intent(this, SimulationResultActivity.class);
         Spinner statusSpinner = (Spinner) findViewById(R.id.statusSpinner);
 
-        //TODO: not necessary now, geting selected value from spinner
-        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String patientStatus = parent.getItemAtPosition(position).toString();
-                intent.putExtra("patientStatus", patientStatus);
-            }
+        statusSpinner.setVisibility(View.VISIBLE);
+        String patientStatus = statusSpinner.getSelectedItem().toString();
+        chosenPatientStatus.putExtra("patientStatus", patientStatus);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        startActivity(intent);
+        startActivity(chosenPatientStatus);
     }
 }
