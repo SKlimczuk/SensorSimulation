@@ -31,8 +31,8 @@ public class SimulationResultActivity extends AppCompatActivity {
             //todo: find the correct place to this code
             PatientStatus patientStatus = sensorActivity.stringToEnumConverter(status.getString("patientStatus"));
             setImageDependsOnPatientStatus(patientStatus, statusImage);
-//            sensorActivity.lifeLineSimulation(sensor, patientStatus, 1000);
-//            result.setText(generateOutputMessage(sensor.getPulse(), sensor.getBloodSaturation()));
+            sensorActivity.lifeLineSimulation(sensor, patientStatus, 1000);
+            result.setText(generateOutputMessage(sensor.getPulse(), sensor.getBloodSaturation()));
 
         } catch (Throwable e) {
             e.printStackTrace();
