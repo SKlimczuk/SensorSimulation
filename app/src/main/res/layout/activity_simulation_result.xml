@@ -26,4 +26,13 @@
         android:inputType="text"
         android:textSize="20sp" />
 
+    <Button
+        android:id="@+id/beginAdvertisment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="broadcast"
+        android:textSize="20px"
+        android:layout_below="@id/printResult"/>
+
 </RelativeLayout>

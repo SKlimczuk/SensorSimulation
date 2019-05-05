@@ -11,4 +11,5 @@
         <item>black</item>
         <item>random</item>
     </string-array>
+    <string name="ble_uuid">9CF86DC9-71AB-4578-8F9D-B792A01321EB</string>
 </resources>

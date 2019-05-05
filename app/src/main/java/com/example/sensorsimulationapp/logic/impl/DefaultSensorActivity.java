@@ -1,12 +1,8 @@
 package com.example.sensorsimulationapp.logic.impl;
 
 import android.annotation.TargetApi;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.os.Build;
 
-import com.example.sensorsimulationapp.bluetooth.BluetoothConector;
 import com.example.sensorsimulationapp.logic.SensorActivity;
 import com.example.sensorsimulationapp.model.PatientStatus;
 import com.example.sensorsimulationapp.model.Sensor;
@@ -60,11 +56,9 @@ public class DefaultSensorActivity implements SensorActivity {
     //TODO: not sure if this method should be here or in activity class ???
     @Override
     public void lifeLineSimulation(Sensor sensor, PatientStatus patientStatus, int seconds) throws InterruptedException {
-        BluetoothConector bluetoothConector = new BluetoothConector(BluetoothSocket.TYPE_RFCOMM);
         for (int i = 0; i < seconds; i++) {
             sensor.setPulse(generatePulse(patientStatus));
             sensor.setBloodSaturation(generateBloodSaturation(patientStatus));
-//            Thread.sleep(1000);
         }
 
     }
