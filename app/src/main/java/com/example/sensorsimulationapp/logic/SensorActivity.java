@@ -18,15 +18,22 @@ public interface SensorActivity {
     int generateBloodSaturation(PatientStatus patientStatus);
 
     /**
+     *
+     * @param patientStatus specify current status of patient
+     * @return generated breathe per minute depending on patients status
+     */
+    int generateBreathPerMinute(PatientStatus patientStatus);
+
+    /**
      * @param toConvert String value to convert
      * @return enum value
      */
     PatientStatus stringToEnumConverter(String toConvert) throws Throwable;
 
+
     /**
      * @param sensor        to store data from simulation
      * @param patientStatus status
-     * @param seconds       duration of simulation
      */
-    void lifeLineSimulation(Sensor sensor, PatientStatus patientStatus, int seconds) throws InterruptedException;
+    void lifeLineSimulation(Sensor sensor, PatientStatus patientStatus);
 }

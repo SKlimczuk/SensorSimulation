@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.sensorsimulationapp.logic.SensorActivity;
 import com.example.sensorsimulationapp.logic.impl.DefaultSensorActivity;
@@ -23,8 +24,13 @@ import java.util.UUID;
 
 public class SimulationResultActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private Sensor sensor;
+
     private Button mAdvertiseButton;
     private Button colorButton;
+    private TextView bloodText;
+    private TextView heartText;
+    private TextView lungText;
 
     private final SensorActivity sensorActivity = new DefaultSensorActivity();
 
@@ -33,28 +39,45 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simulation_result);
 
-        Sensor sensor = new Sensor();
+        sensor = new Sensor();
 
-//        EditText result = findViewById(R.id.printResult);
         colorButton = findViewById(R.id.colourCircle);
         mAdvertiseButton = findViewById(R.id.broadcastButton);
         mAdvertiseButton.setOnClickListener(this);
+        bloodText = findViewById(R.id.bloodText);
+        lungText = findViewById(R.id.lungText);
+        heartText = findViewById(R.id.heartText);
 
+        printMeasurementResult();
+//        try {
+//            Bundle status = getIntent().getExtras();
+//
+//            PatientStatus patientStatus = sensorActivity.stringToEnumConverter(status.getString("patientStatus"));
+//            setColorAsPatientStatus(patientStatus);
+//            sensorActivity.lifeLineSimulation(sensor, patientStatus, 1000);
+//            bloodText.setText(sensor.getBloodSaturation());
+//            heartText.setText(sensor.getPulse());
+//            lungText.setText(sensor.getBreathPerMinute());
+//
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    public void printMeasurementResult() {
         try {
             Bundle status = getIntent().getExtras();
 
             PatientStatus patientStatus = sensorActivity.stringToEnumConverter(status.getString("patientStatus"));
             setColorAsPatientStatus(patientStatus);
-//            sensorActivity.lifeLineSimulation(sensor, patientStatus, 1000);
-//            result.setText(generateOutputMessage(sensor.getPulse(), sensor.getBloodSaturation()));
+            sensorActivity.lifeLineSimulation(sensor, patientStatus);
+            bloodText.setText("" + sensor.getBloodSaturation());
+            heartText.setText("" + sensor.getPulse());
+            lungText.setText("" + sensor.getBreathPerMinute());
 
         } catch (Throwable e) {
             e.printStackTrace();
         }
-    }
-
-    private String generateOutputMessage(int pulse, int saturation) {
-        return "PULSE: " + pulse + "\nSATURATION: " + saturation;
     }
 
     private void setColorAsPatientStatus(PatientStatus patientStatus) {

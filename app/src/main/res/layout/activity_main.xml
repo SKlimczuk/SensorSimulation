@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/statusSpinner"
-        android:background="@drawable/begin_button"
+        android:background="@drawable/custom_button"
         android:onClick="beginSimulation"
         android:text="@string/simulate" />
 

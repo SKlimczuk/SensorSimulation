@@ -42,6 +42,14 @@ public class DefaultSensorActivity implements SensorActivity {
         return saturationLevel;
     }
 
+    @Override
+    public int generateBreathPerMinute(PatientStatus patientStatus) {
+        Random random = new Random();
+        int saturationLevel = random.nextInt(100) + 1;
+        return saturationLevel;
+    }
+
+
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     public PatientStatus stringToEnumConverter(String toConvert) {
@@ -55,11 +63,9 @@ public class DefaultSensorActivity implements SensorActivity {
 
     //TODO: not sure if this method should be here or in activity class ???
     @Override
-    public void lifeLineSimulation(Sensor sensor, PatientStatus patientStatus, int seconds) throws InterruptedException {
-        for (int i = 0; i < seconds; i++) {
-            sensor.setPulse(generatePulse(patientStatus));
-            sensor.setBloodSaturation(generateBloodSaturation(patientStatus));
-        }
-
+    public void lifeLineSimulation(Sensor sensor, PatientStatus patientStatus) {
+        sensor.setPulse(generatePulse(patientStatus));
+        sensor.setBloodSaturation(generateBloodSaturation(patientStatus));
+        sensor.setBreathPerMinute(generateBreathPerMinute(patientStatus));
     }
 }
