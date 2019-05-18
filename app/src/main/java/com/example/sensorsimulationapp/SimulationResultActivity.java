@@ -5,14 +5,13 @@ import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
+import android.graphics.Color;
 import android.os.ParcelUuid;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.example.sensorsimulationapp.logic.SensorActivity;
 import com.example.sensorsimulationapp.logic.impl.DefaultSensorActivity;
@@ -24,6 +23,7 @@ import java.util.UUID;
 public class SimulationResultActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mAdvertiseButton;
+    private Button colorButton;
 
     private final SensorActivity sensorActivity = new DefaultSensorActivity();
 
@@ -34,48 +34,43 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
 
         Sensor sensor = new Sensor();
 
-        EditText result = findViewById(R.id.printResult);
-        ImageView statusImage = findViewById(R.id.statusView);
+//        EditText result = findViewById(R.id.printResult);
+        colorButton = findViewById(R.id.colourCircle);
+        mAdvertiseButton = findViewById(R.id.broadcastButton);
+        mAdvertiseButton.setOnClickListener(this);
 
         try {
             Bundle status = getIntent().getExtras();
 
-            //todo: find the correct place to this code
             PatientStatus patientStatus = sensorActivity.stringToEnumConverter(status.getString("patientStatus"));
-            setImageDependsOnPatientStatus(patientStatus, statusImage);
-            sensorActivity.lifeLineSimulation(sensor, patientStatus, 1000);
-            result.setText(generateOutputMessage(sensor.getPulse(), sensor.getBloodSaturation()));
+            setColorAsPatientStatus(patientStatus);
+//            sensorActivity.lifeLineSimulation(sensor, patientStatus, 1000);
+//            result.setText(generateOutputMessage(sensor.getPulse(), sensor.getBloodSaturation()));
 
         } catch (Throwable e) {
             e.printStackTrace();
         }
-
-        mAdvertiseButton = findViewById(R.id.beginAdvertisment);
-
-        mAdvertiseButton.setOnClickListener(this);
     }
 
     private String generateOutputMessage(int pulse, int saturation) {
         return "PULSE: " + pulse + "\nSATURATION: " + saturation;
     }
 
-    private void setImageDependsOnPatientStatus(PatientStatus patientStatus, ImageView imageView) {
+    private void setColorAsPatientStatus(PatientStatus patientStatus) {
         if (patientStatus.equals(PatientStatus.BLACK)) {
-            imageView.setImageResource(R.drawable.black);
+            colorButton.setBackgroundColor(Color.BLACK);
         } else if (patientStatus.equals(PatientStatus.RED)) {
-            imageView.setImageResource(R.drawable.red);
+            colorButton.setBackgroundColor(Color.RED);
         } else if (patientStatus.equals(PatientStatus.YELLOW)) {
-            imageView.setImageResource(R.drawable.yellow);
+            colorButton.setBackgroundColor(Color.YELLOW);
         } else if (patientStatus.equals(PatientStatus.GREEN)) {
-            imageView.setImageResource(R.drawable.green);
-        } else {
-            imageView.setImageResource(R.drawable.random);
+            colorButton.setBackgroundColor(Color.GREEN);
         }
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.beginAdvertisment)
+        if (v.getId() == mAdvertiseButton.getId())
             advertise();
     }
 

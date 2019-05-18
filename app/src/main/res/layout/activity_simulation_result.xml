@@ -3,36 +3,82 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".SimulationResultActivity">
 
-    <ImageView
-        android:id="@+id/statusView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/printResult"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="14dp"
-        android:src="@drawable/black" />
-
-    <EditText
-        android:id="@+id/printResult"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/colourCircle"
+        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:clickable="false"
-        android:cursorVisible="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:inputType="text"
-        android:textSize="20sp" />
+        android:layout_width="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/circle"/>
+
+    <ImageView
+        android:id="@+id/heart"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/colourCircle"
+        android:src="@drawable/heartbeat" />
+
+    <View
+        android:id="@+id/sep1"
+        android:layout_below="@id/heart"
+        android:layout_width="240dp"
+        android:layout_height="6dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/black"/>
+
+    <ImageView
+        android:id="@+id/blood"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/sep1"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/blood" />
+
+    <View
+        android:id="@+id/sep2"
+        android:layout_below="@id/blood"
+        android:layout_width="240dp"
+        android:layout_height="6dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/black"/>
+
+    <ImageView
+        android:id="@+id/lung"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp"
+        android:layout_below="@id/sep2"
+        android:src="@drawable/lung" />
+
+    <!--<EditText-->
+        <!--android:id="@+id/printResult"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:clickable="false"-->
+        <!--android:cursorVisible="false"-->
+        <!--android:focusable="false"-->
+        <!--android:focusableInTouchMode="false"-->
+        <!--android:inputType="text"-->
+        <!--android:textSize="20sp" />-->
 
     <Button
-        android:id="@+id/beginAdvertisment"
-        android:layout_width="wrap_content"
+        android:id="@+id/broadcastButton"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="broadcast"
-        android:textSize="20px"
-        android:layout_below="@id/printResult"/>
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/lung"
+        android:background="@drawable/begin_button"
+        android:text="BROADCAST" />
 
 </RelativeLayout>

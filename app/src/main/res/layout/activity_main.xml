@@ -3,43 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    android:background="@drawable/background"
+    android:paddingTop="40px"
     tools:context=".MainActivity">
 
 
     <ImageView
-        android:id="@+id/sensorView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/appName"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="0dp"
-        android:src="@drawable/sensor" />
-
-    <TextView
-        android:id="@+id/appName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/title_simulation"
-        android:textSize="20sp" />
+        android:id="@+id/patientView"
+        android:layout_width="335dp"
+        android:layout_height="370dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/patient" />
 
     <Spinner
         android:id="@+id/statusSpinner"
-        android:layout_width="match_parent"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/appName"
+        android:layout_below="@+id/patientView"
+        android:layout_centerHorizontal="true"
         android:prompt="@string/chooseOptionSpinner"
+        android:layout_marginBottom="50dp"
         android:entries="@array/patientStatus" />
 
     <Button
-        android:id="@+id/beginSimulationButton"
-        android:layout_width="wrap_content"
+        android:id="@+id/beginButton"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/statusSpinner"
-        android:layout_centerInParent="true"
-        android:text="@string/begin_simulation"
-        android:textSize="20sp"
-        android:onClick="beginSimulation"/>
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/statusSpinner"
+        android:background="@drawable/begin_button"
+        android:text="SIMULATE" />
 
 </RelativeLayout>
