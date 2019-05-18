@@ -6,6 +6,7 @@ import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.os.ParcelUuid;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,13 +59,17 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
 
     private void setColorAsPatientStatus(PatientStatus patientStatus) {
         if (patientStatus.equals(PatientStatus.BLACK)) {
-            colorButton.setBackgroundColor(Color.BLACK);
+            colorButton.getBackground()
+                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.BLACK));
         } else if (patientStatus.equals(PatientStatus.RED)) {
-            colorButton.setBackgroundColor(Color.RED);
+            colorButton.getBackground()
+                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.RED));
         } else if (patientStatus.equals(PatientStatus.YELLOW)) {
-            colorButton.setBackgroundColor(Color.YELLOW);
+            colorButton.getBackground()
+                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.YELLOW));
         } else if (patientStatus.equals(PatientStatus.GREEN)) {
-            colorButton.setBackgroundColor(Color.GREEN);
+            colorButton.getBackground()
+                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.GREEN));
         }
     }
 

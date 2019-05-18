@@ -9,6 +9,7 @@ public class Sensor {
     private int id;
     private int pulse;
     private int bloodSaturation;
+    private int breathPerMinute;
 
     public Sensor() {
         this.id = nextId.incrementAndGet();
@@ -32,5 +33,13 @@ public class Sensor {
 
     public void setBloodSaturation(int bloodSaturation) {
         this.bloodSaturation = bloodSaturation;
+    }
+
+    public int getBreathPerMinute() {
+        return breathPerMinute;
+    }
+
+    public void setBreathPerMinute(int breathPerMinute) {
+        this.breathPerMinute = breathPerMinute;
     }
 }

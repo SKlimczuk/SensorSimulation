@@ -33,6 +33,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/statusSpinner"
         android:background="@drawable/begin_button"
-        android:text="SIMULATE" />
+        android:onClick="beginSimulation"
+        android:text="@string/simulate" />
 
 </RelativeLayout>
