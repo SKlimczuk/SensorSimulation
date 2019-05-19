@@ -68,4 +68,12 @@ public class DefaultSensorActivity implements SensorActivity {
         sensor.setBloodSaturation(generateBloodSaturation(patientStatus));
         sensor.setBreathPerMinute(generateBreathPerMinute(patientStatus));
     }
+
+    @Override
+    public String customAdvertisingPacketGenerator(Sensor sensor) {
+        return sensor.getId() + "," +
+                sensor.getPulse() + "," +
+                sensor.getBloodSaturation() + "," +
+                sensor.getBreathPerMinute();
+    }
 }

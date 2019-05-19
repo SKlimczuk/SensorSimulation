@@ -36,4 +36,11 @@ public interface SensorActivity {
      * @param patientStatus status
      */
     void lifeLineSimulation(Sensor sensor, PatientStatus patientStatus);
+
+    /**
+     *
+     * @param sensor to retrieve data
+     * @return json as string
+     */
+    String customAdvertisingPacketGenerator(Sensor sensor);
 }

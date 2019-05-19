@@ -5,8 +5,12 @@ import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.ParcelUuid;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,9 +24,10 @@ import com.example.sensorsimulationapp.logic.impl.DefaultSensorActivity;
 import com.example.sensorsimulationapp.model.PatientStatus;
 import com.example.sensorsimulationapp.model.Sensor;
 
+import java.nio.charset.Charset;
 import java.util.UUID;
 
-public class SimulationResultActivity extends AppCompatActivity implements View.OnClickListener {
+public class SimulationResultActivity extends AppCompatActivity implements View.OnClickListener/*, LocationListener*/ {
 
     private Sensor sensor;
 
@@ -31,6 +36,10 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
     private TextView bloodText;
     private TextView heartText;
     private TextView lungText;
+
+//    protected LocationManager locationManager;
+//    protected LocationListener locationListener;
+//    private float latitude, longitude;
 
     private final SensorActivity sensorActivity = new DefaultSensorActivity();
 
@@ -48,20 +57,10 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
         lungText = findViewById(R.id.lungText);
         heartText = findViewById(R.id.heartText);
 
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
+
         printMeasurementResult();
-//        try {
-//            Bundle status = getIntent().getExtras();
-//
-//            PatientStatus patientStatus = sensorActivity.stringToEnumConverter(status.getString("patientStatus"));
-//            setColorAsPatientStatus(patientStatus);
-//            sensorActivity.lifeLineSimulation(sensor, patientStatus, 1000);
-//            bloodText.setText(sensor.getBloodSaturation());
-//            heartText.setText(sensor.getPulse());
-//            lungText.setText(sensor.getBreathPerMinute());
-//
-//        } catch (Throwable e) {
-//            e.printStackTrace();
-//        }
     }
 
     public void printMeasurementResult() {
@@ -106,21 +105,26 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
         BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
 
         AdvertiseSettings settings = new AdvertiseSettings.Builder()
-                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
-                .setConnectable(false)
+                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED)
+                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
+                .setConnectable(true)
                 .build();
 
         ParcelUuid pUuid = new ParcelUuid(UUID.fromString(getString(R.string.ble_uuid)));
 
+//        String advData = sensorActivity.customAdvertisingPacketGenerator(sensor) + "," + latitude + "," + longitude;
+        String advData = sensorActivity.customAdvertisingPacketGenerator(sensor);
+
         AdvertiseData data = new AdvertiseData.Builder()
                 .setIncludeDeviceName(false)
-                .addServiceUuid(pUuid)
+                .setIncludeTxPowerLevel(false)
+                .addServiceData(pUuid, advData.getBytes(Charset.forName("UTF-8")))
                 .build();
 
         AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
             @Override
             public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+                Log.i("BLE", "started advertising with data:" + advData);
                 super.onStartSuccess(settingsInEffect);
             }
 
@@ -134,5 +138,24 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
         advertiser.startAdvertising(settings, data, advertisingCallback);
     }
 
-
+//    @Override
+//    public void onLocationChanged(Location location) {
+//        latitude = (float) location.getLatitude();
+//        longitude = (float) location.getLongitude();
+//    }
+//
+//    @Override
+//    public void onProviderDisabled(String provider) {
+//        Log.d("Latitude", "disable");
+//    }
+//
+//    @Override
+//    public void onProviderEnabled(String provider) {
+//        Log.d("Latitude", "enable");
+//    }
+//
+//    @Override
+//    public void onStatusChanged(String provider, int status, Bundle extras) {
+//        Log.d("Latitude", "status");
+//    }
 }

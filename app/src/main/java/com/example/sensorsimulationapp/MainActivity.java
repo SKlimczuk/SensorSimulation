@@ -1,5 +1,6 @@
 package com.example.sensorsimulationapp;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         checkIfBleIsSupported();
         checkIfBtIsEnabled();
+//        checkIfGpsIsEnabled();
     }
 
     public void beginSimulation(View view) {
@@ -52,4 +54,11 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(enableBtIntent, BluetoothConstants.REQUEST_ENABLE_BT);
         }
     }
+
+//    private void checkIfGpsIsEnabled() {
+//        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_CALENDAR)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            Toast.makeText(this, "gps not granted", Toast.LENGTH_LONG).show();
+//        }
+//    }
 }
