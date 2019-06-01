@@ -4,10 +4,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
+import android.bluetooth.le.AdvertisingSet;
+import android.bluetooth.le.AdvertisingSetCallback;
+import android.bluetooth.le.AdvertisingSetParameters;
 import android.bluetooth.le.BluetoothLeAdvertiser;
+import android.bluetooth.le.PeriodicAdvertisingParameters;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
+import android.os.Build;
 import android.os.ParcelUuid;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +28,7 @@ import com.example.sensorsimulationapp.model.Sensor;
 
 import java.nio.charset.Charset;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class SimulationResultActivity extends AppCompatActivity implements View.OnClickListener/*, LocationListener*/ {
 
@@ -34,6 +41,8 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
     private TextView bloodText;
     private TextView lungText;
     private TextView heartText;
+
+    private BluetoothLeAdvertiser advertiser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,8 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
 
         mAdvertiseButton.setOnClickListener(this);
         mStopAdvertiseButton.setOnClickListener(this);
+
+        advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
 
         Runnable myRunnableThread = new CountDownRunner();
         Thread myThread = new Thread(myRunnableThread);
@@ -66,20 +77,15 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
     private void advertise() {
         signalingOfBroadcastStateChanged(true);
 
-        BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
-
         AdvertiseSettings settings = new AdvertiseSettings.Builder()
                 .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED)
                 .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
-                .setConnectable(true)
+                .setConnectable(false)
                 .build();
 
-        ParcelUuid pUuid = new ParcelUuid(UUID.fromString(getString(R.string.ble_uuid)));
-
-//        String advData = sensorActivity.customAdvertisingPacketGenerator(sensor) + "," + latitude + "," + longitude;
         String advData = sensorActivity.customAdvertisingPacketGenerator(sensor);
-
-        AdvertiseData data = new AdvertiseData.Builder()
+        ParcelUuid pUuid = new ParcelUuid(UUID.fromString(getString(R.string.ble_uuid)));
+        AdvertiseData advertiseData = new AdvertiseData.Builder()
                 .setIncludeDeviceName(false)
                 .setIncludeTxPowerLevel(false)
                 .addServiceData(pUuid, advData.getBytes(Charset.forName("UTF-8")))
@@ -99,10 +105,17 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
             }
         };
 
-        advertiser.startAdvertising(settings, data, advertisingCallback);
+        advertiser.startAdvertising(settings, advertiseData, advertisingCallback);
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        advertiser.stopAdvertising(advertisingCallback);
     }
 
     private void stopAdvertise() {
+//        advertiser.stopAdvertising(advertisingCallback);
         signalingOfBroadcastStateChanged(false);
     }
 
