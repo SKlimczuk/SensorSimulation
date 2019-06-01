@@ -3,36 +3,119 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".SimulationResultActivity">
 
-    <ImageView
-        android:id="@+id/statusView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/printResult"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="14dp"
-        android:src="@drawable/black" />
-
-    <EditText
-        android:id="@+id/printResult"
+    <Button
+        android:id="@+id/colourCircle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:clickable="false"
-        android:cursorVisible="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:inputType="text"
-        android:textSize="20sp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/circle" />
+
+    <LinearLayout
+        android:id="@+id/lineHeart"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/colourCircle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:id="@+id/heart"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/heartbeat" />
+
+        <TextView
+            android:id="@+id/heartText"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:textColor="@android:color/black"
+            android:textSize="70sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lineBlood"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/sep1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:id="@+id/blood"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/blood" />
+
+        <TextView
+            android:id="@+id/bloodText"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:textColor="@android:color/black"
+            android:textSize="70sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lineLung"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/sep2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp">
+
+        <ImageView
+            android:id="@+id/lung"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/lung" />
+
+        <TextView
+            android:id="@+id/lungText"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:textColor="@android:color/black"
+            android:textSize="70sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/sep1"
+        android:layout_width="240dp"
+        android:layout_height="6dp"
+        android:layout_below="@id/lineHeart"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/black" />
+
+    <View
+        android:id="@+id/sep2"
+        android:layout_width="240dp"
+        android:layout_height="6dp"
+        android:layout_below="@id/lineBlood"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/black" />
 
     <Button
-        android:id="@+id/beginAdvertisment"
-        android:layout_width="wrap_content"
+        android:id="@+id/broadcastButton"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="broadcast"
-        android:textSize="20px"
-        android:layout_below="@id/printResult"/>
+        android:layout_below="@id/lineLung"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/custom_button"
+        android:text="@string/broadcast" />
+
+    <Button
+        android:id="@+id/stopBroadcastButton"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/broadcastButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/custom_button"
+        android:text="@string/stopBroadcast" />
 
 </RelativeLayout>
