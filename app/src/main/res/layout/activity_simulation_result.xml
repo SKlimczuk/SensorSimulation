@@ -108,4 +108,14 @@
         android:background="@drawable/custom_button"
         android:text="@string/broadcast" />
 
+    <Button
+        android:id="@+id/stopBroadcastButton"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/broadcastButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/custom_button"
+        android:text="@string/stopBroadcast" />
+
 </RelativeLayout>

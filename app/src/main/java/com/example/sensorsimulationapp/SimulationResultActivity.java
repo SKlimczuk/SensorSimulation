@@ -5,12 +5,8 @@ import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.ParcelUuid;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,79 +25,40 @@ import java.util.UUID;
 
 public class SimulationResultActivity extends AppCompatActivity implements View.OnClickListener/*, LocationListener*/ {
 
-    private Sensor sensor;
-
-    private Button mAdvertiseButton;
-    private Button colorButton;
-    private TextView bloodText;
-    private TextView heartText;
-    private TextView lungText;
-
-//    protected LocationManager locationManager;
-//    protected LocationListener locationListener;
-//    private float latitude, longitude;
-
+    private Sensor sensor = new Sensor();
     private final SensorActivity sensorActivity = new DefaultSensorActivity();
+
+    private Button colorButton = findViewById(R.id.colourCircle);
+    private Button mAdvertiseButton = findViewById(R.id.broadcastButton);
+    private Button mStopAdvertiseButton = findViewById(R.id.stopBroadcastButton);
+    private TextView bloodText = findViewById(R.id.bloodText);
+    private TextView lungText = findViewById(R.id.lungText);
+    private TextView heartText = findViewById(R.id.heartText);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simulation_result);
 
-        sensor = new Sensor();
-
-        colorButton = findViewById(R.id.colourCircle);
-        mAdvertiseButton = findViewById(R.id.broadcastButton);
         mAdvertiseButton.setOnClickListener(this);
-        bloodText = findViewById(R.id.bloodText);
-        lungText = findViewById(R.id.lungText);
-        heartText = findViewById(R.id.heartText);
+        mStopAdvertiseButton.setOnClickListener(this);
 
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
-
-        printMeasurementResult();
-    }
-
-    public void printMeasurementResult() {
-        try {
-            Bundle status = getIntent().getExtras();
-
-            PatientStatus patientStatus = sensorActivity.stringToEnumConverter(status.getString("patientStatus"));
-            setColorAsPatientStatus(patientStatus);
-            sensorActivity.lifeLineSimulation(sensor, patientStatus);
-            bloodText.setText("" + sensor.getBloodSaturation());
-            heartText.setText("" + sensor.getPulse());
-            lungText.setText("" + sensor.getBreathPerMinute());
-
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void setColorAsPatientStatus(PatientStatus patientStatus) {
-        if (patientStatus.equals(PatientStatus.BLACK)) {
-            colorButton.getBackground()
-                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.BLACK));
-        } else if (patientStatus.equals(PatientStatus.RED)) {
-            colorButton.getBackground()
-                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.RED));
-        } else if (patientStatus.equals(PatientStatus.YELLOW)) {
-            colorButton.getBackground()
-                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.YELLOW));
-        } else if (patientStatus.equals(PatientStatus.GREEN)) {
-            colorButton.getBackground()
-                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.GREEN));
-        }
+        Runnable myRunnableThread = new CountDownRunner();
+        Thread myThread = new Thread(myRunnableThread);
+        myThread.start();
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == mAdvertiseButton.getId())
             advertise();
+        if (v.getId() == mStopAdvertiseButton.getId())
+            stopAdvertise();
     }
 
     private void advertise() {
+        signalingOfBroadcastStateChanged(true);
+
         BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
 
         AdvertiseSettings settings = new AdvertiseSettings.Builder()
@@ -138,24 +95,82 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
         advertiser.startAdvertising(settings, data, advertisingCallback);
     }
 
-//    @Override
-//    public void onLocationChanged(Location location) {
-//        latitude = (float) location.getLatitude();
-//        longitude = (float) location.getLongitude();
-//    }
-//
-//    @Override
-//    public void onProviderDisabled(String provider) {
-//        Log.d("Latitude", "disable");
-//    }
-//
-//    @Override
-//    public void onProviderEnabled(String provider) {
-//        Log.d("Latitude", "enable");
-//    }
-//
-//    @Override
-//    public void onStatusChanged(String provider, int status, Bundle extras) {
-//        Log.d("Latitude", "status");
-//    }
+    private void stopAdvertise() {
+        signalingOfBroadcastStateChanged(false);
+    }
+
+    public void doWork() {
+        runOnUiThread(() -> {
+            try {
+                printMeasurementResult();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    class CountDownRunner implements Runnable {
+        @Override
+        public void run() {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    doWork();
+                    Thread.sleep(1000); // Pause of 1 Second
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
+
+    public void printMeasurementResult() {
+        try {
+            Bundle status = getIntent().getExtras();
+
+            PatientStatus patientStatus = sensorActivity.stringToEnumConverter(status.getString("patientStatus"));
+            setColorAsPatientStatus(patientStatus);
+            sensorActivity.lifeLineSimulation(sensor, patientStatus);
+            setSimulatedPatientId(sensor);
+            bloodText.setText("" + sensor.getBloodSaturation());
+            heartText.setText("" + sensor.getPulse());
+            lungText.setText("" + sensor.getBreathPerMinute());
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setColorAsPatientStatus(PatientStatus patientStatus) {
+        if (patientStatus.equals(PatientStatus.BLACK)) {
+            colorButton.getBackground()
+                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.BLACK));
+        } else if (patientStatus.equals(PatientStatus.RED)) {
+            colorButton.getBackground()
+                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.RED));
+        } else if (patientStatus.equals(PatientStatus.YELLOW)) {
+            colorButton.getBackground()
+                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.YELLOW));
+        } else if (patientStatus.equals(PatientStatus.GREEN)) {
+            colorButton.getBackground()
+                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.GREEN));
+        }
+    }
+
+    private void setSimulatedPatientId(Sensor sensor) {
+        try {
+            colorButton.setText("" + sensor.getId());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void signalingOfBroadcastStateChanged(boolean state) {
+        if (state)
+            mAdvertiseButton.getBackground()
+                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.BLUE));
+        else
+            mAdvertiseButton.getBackground()
+                    .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.BLACK));
+    }
 }

@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    android:paddingTop="40px"
     tools:context=".MainActivity">
 
 
@@ -13,6 +12,7 @@
         android:layout_width="335dp"
         android:layout_height="370dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="50dp"
         android:src="@drawable/patient" />
 
