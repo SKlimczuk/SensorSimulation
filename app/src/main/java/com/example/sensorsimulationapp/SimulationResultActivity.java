@@ -28,17 +28,24 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
     private Sensor sensor = new Sensor();
     private final SensorActivity sensorActivity = new DefaultSensorActivity();
 
-    private Button colorButton = findViewById(R.id.colourCircle);
-    private Button mAdvertiseButton = findViewById(R.id.broadcastButton);
-    private Button mStopAdvertiseButton = findViewById(R.id.stopBroadcastButton);
-    private TextView bloodText = findViewById(R.id.bloodText);
-    private TextView lungText = findViewById(R.id.lungText);
-    private TextView heartText = findViewById(R.id.heartText);
+    private Button colorButton;
+    private Button mAdvertiseButton;
+    private Button mStopAdvertiseButton;
+    private TextView bloodText;
+    private TextView lungText;
+    private TextView heartText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simulation_result);
+
+        colorButton = findViewById(R.id.colourCircle);
+        mAdvertiseButton = findViewById(R.id.broadcastButton);
+        mStopAdvertiseButton = findViewById(R.id.stopBroadcastButton);
+        bloodText = findViewById(R.id.bloodText);
+        lungText = findViewById(R.id.lungText);
+        heartText = findViewById(R.id.heartText);
 
         mAdvertiseButton.setOnClickListener(this);
         mStopAdvertiseButton.setOnClickListener(this);
