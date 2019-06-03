@@ -22,7 +22,7 @@ public interface SensorActivity {
      * @param patientStatus specify current status of patient
      * @return generated breathe per minute depending on patients status
      */
-    int generateBreathPerMinute(PatientStatus patientStatus);
+    int generateBreathe(PatientStatus patientStatus);
 
     /**
      * @param toConvert String value to convert

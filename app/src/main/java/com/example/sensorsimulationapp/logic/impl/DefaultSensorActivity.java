@@ -16,37 +16,48 @@ public class DefaultSensorActivity implements SensorActivity {
     @Override
     public int generatePulse(PatientStatus patientStatus) {
         Random random = new Random();
-        int pulse;
+        int pulse = 0;
 
-        //TODO: investigate what is the correct pulse value for specific patients status
-        if (patientStatus.equals(PatientStatus.BLACK)) {
-            pulse = 1;
-        } else if (patientStatus.equals(PatientStatus.RED)) {
-            pulse = 2;
-        } else if (patientStatus.equals(PatientStatus.YELLOW)) {
-            pulse = 3;
-        } else if (patientStatus.equals(PatientStatus.GREEN)) {
-            pulse = 4;
-        } else {
-            pulse = random.nextInt(100) + 4;
-        }
+        if (patientStatus.equals(PatientStatus.BLACK))
+            pulse = 0;
+        else if (patientStatus.equals(PatientStatus.RED))
+            pulse = random.nextInt(40) + 5;
+        else if (patientStatus.equals(PatientStatus.YELLOW) || patientStatus.equals(PatientStatus.GREEN))
+            pulse = random.nextInt(31) + 60;
 
         return pulse;
     }
 
     @Override
     public int generateBloodSaturation(PatientStatus patientStatus) {
-        //TODO: investigate what is the correct saturation level value for specific patients status
         Random random = new Random();
-        int saturationLevel = random.nextInt(100) + 1;
-        return saturationLevel;
+        int saturation = 0;
+
+        if (patientStatus.equals(PatientStatus.BLACK))
+            saturation = 0;
+        else if (patientStatus.equals(PatientStatus.RED))
+            saturation = random.nextInt(30) + 1;
+        else if (patientStatus.equals(PatientStatus.YELLOW))
+            saturation = random.nextInt(60) + 30;
+        else if (patientStatus.equals(PatientStatus.GREEN))
+            saturation = random.nextInt(5) + 90;
+
+        return saturation;
     }
 
     @Override
-    public int generateBreathPerMinute(PatientStatus patientStatus) {
+    public int generateBreathe(PatientStatus patientStatus) {
         Random random = new Random();
-        int saturationLevel = random.nextInt(100) + 1;
-        return saturationLevel;
+        int breathe = 0;
+
+        if (patientStatus.equals(PatientStatus.BLACK))
+            breathe = 0;
+        else if (patientStatus.equals(PatientStatus.RED))
+            breathe = random.nextInt(20) + 1;
+        else if (patientStatus.equals(PatientStatus.YELLOW) || patientStatus.equals(PatientStatus.GREEN))
+            breathe = random.nextInt(31) + 30;
+
+        return breathe;
     }
 
 
@@ -60,13 +71,11 @@ public class DefaultSensorActivity implements SensorActivity {
         return patientStatus.get();
     }
 
-
-    //TODO: not sure if this method should be here or in activity class ???
     @Override
     public void lifeLineSimulation(Sensor sensor, PatientStatus patientStatus) {
         sensor.setPulse(generatePulse(patientStatus));
         sensor.setBloodSaturation(generateBloodSaturation(patientStatus));
-        sensor.setBreathPerMinute(generateBreathPerMinute(patientStatus));
+        sensor.setBreathPerMinute(generateBreathe(patientStatus));
     }
 
     @Override
