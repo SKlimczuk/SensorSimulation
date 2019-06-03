@@ -115,7 +115,6 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
     }
 
     private void stopAdvertise() {
-//        advertiser.stopAdvertising(advertisingCallback);
         signalingOfBroadcastStateChanged(false);
     }
 
