@@ -1,25 +1,26 @@
 package com.example.sensorsimulationapp;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
-import android.bluetooth.le.AdvertisingSet;
-import android.bluetooth.le.AdvertisingSetCallback;
-import android.bluetooth.le.AdvertisingSetParameters;
 import android.bluetooth.le.BluetoothLeAdvertiser;
-import android.bluetooth.le.PeriodicAdvertisingParameters;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
 import android.os.Build;
 import android.os.ParcelUuid;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sensorsimulationapp.logic.SensorActivity;
 import com.example.sensorsimulationapp.logic.impl.DefaultSensorActivity;
@@ -44,6 +45,7 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
 
     private BluetoothLeAdvertiser advertiser;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,8 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
         Runnable myRunnableThread = new CountDownRunner();
         Thread myThread = new Thread(myRunnableThread);
         myThread.start();
+
+        checkIfGpsIsEnabled();
     }
 
     @Override
@@ -83,12 +87,14 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
                 .setConnectable(false)
                 .build();
 
-        String advData = sensorActivity.customAdvertisingPacketGenerator(sensor);
-        ParcelUuid pUuid = new ParcelUuid(UUID.fromString(getString(R.string.ble_uuid)));
+
+        String advData = "t";
+//        String advData = sensorActivity.customAdvertisingPacketGenerator(sensor);
+
         AdvertiseData advertiseData = new AdvertiseData.Builder()
-                .setIncludeDeviceName(false)
+                .setIncludeDeviceName(true)
                 .setIncludeTxPowerLevel(false)
-                .addServiceData(pUuid, advData.getBytes(Charset.forName("UTF-8")))
+                .addManufacturerData(1, advData.getBytes(Charset.forName("UTF-8")))
                 .build();
 
         AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
@@ -191,5 +197,19 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
         else
             mAdvertiseButton.getBackground()
                     .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.BLACK));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void checkIfGpsIsEnabled() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Toast.makeText(this, "The permission to get BLE location data is required", Toast.LENGTH_SHORT).show();
+            } else {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
+        } else {
+            Toast.makeText(this, "Location permissions already granted", Toast.LENGTH_SHORT).show();
+        }
     }
 }
