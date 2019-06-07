@@ -10,7 +10,6 @@
         <item>red</item>
         <item>black</item>
     </string-array>
-    <string name="ble_uuid">9CF86DC9-71AB-4578-8F9D-B792A01321EB</string>
     <string name="simulate">SIMULATE</string>
     <string name="broadcast">BROADCAST</string>
     <string name="stopBroadcast">STOP BROADCAST</string>
