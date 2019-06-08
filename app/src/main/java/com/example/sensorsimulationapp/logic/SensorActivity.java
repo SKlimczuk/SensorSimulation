@@ -18,7 +18,6 @@ public interface SensorActivity {
     int generateBloodSaturation(PatientStatus patientStatus);
 
     /**
-     *
      * @param patientStatus specify current status of patient
      * @return generated breathe per minute depending on patients status
      */
@@ -38,9 +37,8 @@ public interface SensorActivity {
     void lifeLineSimulation(Sensor sensor, PatientStatus patientStatus);
 
     /**
-     *
      * @param sensor to retrieve data
      * @return json as string
      */
-    String customAdvertisingPacketGenerator(Sensor sensor);
+    byte[] customAdvertisingPacketGenerator(Sensor sensor);
 }

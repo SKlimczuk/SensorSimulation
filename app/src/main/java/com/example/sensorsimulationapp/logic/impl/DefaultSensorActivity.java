@@ -60,7 +60,6 @@ public class DefaultSensorActivity implements SensorActivity {
         return breathe;
     }
 
-
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     public PatientStatus stringToEnumConverter(String toConvert) {
@@ -79,10 +78,14 @@ public class DefaultSensorActivity implements SensorActivity {
     }
 
     @Override
-    public String customAdvertisingPacketGenerator(Sensor sensor) {
-        return sensor.getId() + "," +
+    public byte[] customAdvertisingPacketGenerator(Sensor sensor) {
+
+        String toConvert  =
+                sensor.getId() + "," +
                 sensor.getPulse() + "," +
                 sensor.getBloodSaturation() + "," +
                 sensor.getBreathPerMinute();
+
+        return toConvert.getBytes();
     }
 }

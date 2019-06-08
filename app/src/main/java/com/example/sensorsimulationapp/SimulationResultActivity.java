@@ -1,35 +1,25 @@
 package com.example.sensorsimulationapp;
 
-import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
 import android.os.Build;
-import android.os.ParcelUuid;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.sensorsimulationapp.logic.SensorActivity;
 import com.example.sensorsimulationapp.logic.impl.DefaultSensorActivity;
 import com.example.sensorsimulationapp.model.PatientStatus;
 import com.example.sensorsimulationapp.model.Sensor;
-
-import java.nio.charset.Charset;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class SimulationResultActivity extends AppCompatActivity implements View.OnClickListener/*, LocationListener*/ {
 
@@ -66,8 +56,6 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
         Runnable myRunnableThread = new CountDownRunner();
         Thread myThread = new Thread(myRunnableThread);
         myThread.start();
-
-        checkIfGpsIsEnabled();
     }
 
     @Override
@@ -87,20 +75,17 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
                 .setConnectable(false)
                 .build();
 
-
-        String advData = "t";
-//        String advData = sensorActivity.customAdvertisingPacketGenerator(sensor);
+        byte[] advData = sensorActivity.customAdvertisingPacketGenerator(sensor);
 
         AdvertiseData advertiseData = new AdvertiseData.Builder()
                 .setIncludeDeviceName(true)
                 .setIncludeTxPowerLevel(false)
-                .addManufacturerData(1, advData.getBytes(Charset.forName("UTF-8")))
+                .addManufacturerData(1, advData)
                 .build();
 
-        AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
-            @Override
+        AdvertiseCallback advertiseCallback = new AdvertiseCallback() {
             public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-                Log.i("BLE", "started advertising with data:" + advData);
+                Log.i("BLE", "started advertising with data:" + new String(advData));
                 super.onStartSuccess(settingsInEffect);
             }
 
@@ -111,27 +96,24 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
             }
         };
 
-        advertiser.startAdvertising(settings, advertiseData, advertisingCallback);
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        advertiser.stopAdvertising(advertisingCallback);
+        advertiser.startAdvertising(settings, advertiseData, advertiseCallback);
     }
 
     private void stopAdvertise() {
-        signalingOfBroadcastStateChanged(false);
-    }
-
-    public void doWork() {
-        runOnUiThread(() -> {
-            try {
-                printMeasurementResult();
-            } catch (Exception e) {
-                e.printStackTrace();
+        AdvertiseCallback advertiseCallback = new AdvertiseCallback() {
+            @Override
+            public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+                super.onStartSuccess(settingsInEffect);
             }
-        });
+
+            @Override
+            public void onStartFailure(int errorCode) {
+                super.onStartFailure(errorCode);
+            }
+        };
+
+        advertiser.stopAdvertising(advertiseCallback);
+        signalingOfBroadcastStateChanged(false);
     }
 
     class CountDownRunner implements Runnable {
@@ -139,14 +121,25 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
                 try {
-                    doWork();
-                    Thread.sleep(1000); // Pause of 1 Second
+                    periodicMeasurementResultSchedule();
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
+    }
+
+    public void periodicMeasurementResultSchedule() {
+        runOnUiThread(() -> {
+            try {
+                printMeasurementResult();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void printMeasurementResult() {
@@ -197,19 +190,5 @@ public class SimulationResultActivity extends AppCompatActivity implements View.
         else
             mAdvertiseButton.getBackground()
                     .setColorFilter(new LightingColorFilter(Color.TRANSPARENT, Color.BLACK));
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void checkIfGpsIsEnabled() {
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Toast.makeText(this, "The permission to get BLE location data is required", Toast.LENGTH_SHORT).show();
-            } else {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
-        } else {
-            Toast.makeText(this, "Location permissions already granted", Toast.LENGTH_SHORT).show();
-        }
     }
 }
