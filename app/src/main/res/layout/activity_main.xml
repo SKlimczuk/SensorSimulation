@@ -18,7 +18,7 @@
 
     <Spinner
         android:id="@+id/statusSpinner"
-        android:layout_width="280dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/patientView"
         android:layout_centerHorizontal="true"
