@@ -29,7 +29,6 @@ public interface SensorActivity {
      */
     PatientStatus stringToEnumConverter(String toConvert) throws Throwable;
 
-
     /**
      * @param sensor        to store data from simulation
      * @param patientStatus status
@@ -38,7 +37,7 @@ public interface SensorActivity {
 
     /**
      * @param sensor to retrieve data
-     * @return json as string
+     * @return data as string
      */
     byte[] customAdvertisingPacketGenerator(Sensor sensor);
 }

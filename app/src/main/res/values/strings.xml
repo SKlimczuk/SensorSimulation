@@ -2,7 +2,7 @@
     <string name="app_name">SensorSimulationApp</string>
     <string name="begin_simulation">begin simulation</string>
     <string name="title_simulation">sensorApp</string>
-    <string name="chooseOptionSpinner">choose option</string>
+    <string name="chooseOptionSpinner">choose priority</string>
     <string name="activityTitle">result</string>
     <string-array name="patientStatus">
         <item>green</item>
